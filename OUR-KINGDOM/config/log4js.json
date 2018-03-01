@@ -1,0 +1,30 @@
+{
+    "appenders" :{
+        "console":{
+        	"type" : "console",
+        	"layout":{"type":"pattern","pattern":"%d %p %z %c %m%n"}
+        },
+        "serverLog":{
+        	"type" : "file",
+        	"layout":{"type":"pattern","pattern":"%d %p %z %c %m%n"},
+            "filename" : "logs/server.log",
+            "maxLogSize" : 204800,
+            "backups" : 10,
+            "category" : "server"
+        },
+        "appLog":{
+        	"type" : "file",
+        	"layout":{"type":"pattern","pattern":"%d %p %z %c %X{user} %m%n"},
+            "filename" : "logs/app.log",
+            "maxLogSize" : 204800,
+            "backups" : 10,
+            "category" : "app"
+        }
+	},
+	"categories":{
+		"server": { "appenders": ["console","serverLog"], "level": "trace" },
+		"app": { "appenders": ["console","appLog"], "level": "trace" },
+		"default": { "appenders": ["console", "serverLog"], "level": "trace" }
+	},
+    "replaceConsole": true
+}
