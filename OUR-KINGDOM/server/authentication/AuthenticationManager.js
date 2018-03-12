@@ -19,7 +19,6 @@ function hasRole(roles){
 		//解析用户信息
 		var user = jwt.decode(req.cookies.token);
 		req.user=user;
-		logger.server.addContext('user',user.name);
 		logger.server.trace('解析用户信息成功:'+JSON.stringify(user));
 		
 		if(!verifyRoles(req,res,user,roles)){
