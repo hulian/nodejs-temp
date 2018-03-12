@@ -21,7 +21,7 @@ function hasRole(roles){
 		req.user=user;
 		logger.server.trace('解析用户信息成功:'+JSON.stringify(user));
 		
-		if(!verifyRoles(req,res,user,roles)){
+		if(!verifyRoles(req.originalUrl,user,roles)){
 			res.send(403);	
 			return;		
 		}
@@ -30,10 +30,10 @@ function hasRole(roles){
 	};
 }
 
-function verifyRoles(req,res,user,roles){
+function verifyRoles(command,user,roles){
 			
 	//从缓存检查结果
-	var key = user.name+'-'+req.originalUrl;
+	var key = user.name+'-'+command;
 	if(nodecache.get(key)===true){
 		logger.server.trace('有权限访问,缓存key:'+key);
 		return true;

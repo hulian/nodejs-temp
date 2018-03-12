@@ -22,8 +22,7 @@ io.on('connection', function(socket){
 		logger.app.trace('command message:'+JSON.stringify(data));
 					
 		var req={
-			user:socket.decoded_token,
-			originalUrl:data.command
+			user:socket.decoded_token
 		};
 					
 		var res={
@@ -34,7 +33,7 @@ io.on('connection', function(socket){
 					
 		//所有WEBSOCKET API在此声明
 		case 'testDao':
-			if(!authenticationManager.verifyRoles(req,res,req.user,['user'])){
+			if(!authenticationManager.verifyRoles(data.command,req.user,['user'])){
 				fn('403');
 				return;
 			}
