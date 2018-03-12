@@ -4,6 +4,7 @@ var logger = require('../logger/Logger');
 var SocketIo = require('socket.io');
 var socketioJwt = require('socketio-jwt');
 var config = require('config');
+var authenticationManager = require('../authentication/AuthenticationManager');
 var io = new SocketIo();
 
 		
@@ -21,7 +22,8 @@ io.on('connection', function(socket){
 		logger.app.trace('command message:'+JSON.stringify(data));
 					
 		var req={
-			user:socket.decoded_token
+			user:socket.decoded_token,
+			originalUrl:data.command
 		};
 					
 		var res={
@@ -32,7 +34,11 @@ io.on('connection', function(socket){
 					
 		//所有WEBSOCKET API在此声明
 		case 'testDao':
-			return require('./TestController').testDao(req,res);
+			if(!authenticationManager.verifyRoles(req,res,req.user,['user'])){
+				fn('403');
+				return;
+			}
+			return require('./test/TestController').testDao(req,res);
 							
 		}
 					

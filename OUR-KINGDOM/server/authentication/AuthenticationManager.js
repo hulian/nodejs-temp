@@ -18,37 +18,44 @@ function hasRole(roles){
 		
 		//解析用户信息
 		var user = jwt.decode(req.cookies.token);
-		logger.server.addContext('user',user.user);
+		req.user=user;
+		logger.server.addContext('user',user.name);
 		logger.server.trace('解析用户信息成功:'+JSON.stringify(user));
 		
-		//从缓存检查结果
-		var key = user.name+'-'+req.originalUrl;
-		if(nodecache.get(key)===true){
-			logger.server.trace('有权限访问,缓存key:'+key);
-			next();
-			return;
-		}else if(nodecache.get(key)===false){
-			logger.server.trace('无权限访问,缓存key:'+key);
-			res.send(403);
-			return;
+		if(!verifyRoles(req,res,user,roles)){
+			res.send(403);	
+			return;		
 		}
-		
-		//比较权限，并缓存果
-		for(var i=0;i<user.roles.length;i++){
-			for(var j=0;j<roles.length;j++){
-				if(user.roles[i]===roles[j]){
-					nodecache.set(key,true);
-					next();
-					return;
-				}
+
+		next();
+	};
+}
+
+function verifyRoles(req,res,user,roles){
+			
+	//从缓存检查结果
+	var key = user.name+'-'+req.originalUrl;
+	if(nodecache.get(key)===true){
+		logger.server.trace('有权限访问,缓存key:'+key);
+		return true;
+	}else if(nodecache.get(key)===false){
+		logger.server.trace('无权限访问,缓存key:'+key);
+		return false;
+	}
+			
+	//比较权限，并缓存果
+	for(var i=0;i<user.roles.length;i++){
+		for(var j=0;j<roles.length;j++){
+			if(user.roles[i]===roles[j]){
+				nodecache.set(key,true);
+				return true;
 			}
 		}
-		
-		nodecache.set(key,false);
-		logger.server.trace('无访问权限,需要权限:'+roles+' 用户权限:'+user.roles);
-		res.send(403);
-		return;
-	};
+	}
+			
+	nodecache.set(key,false);
+	logger.server.trace('无访问权限,需要权限:'+roles+' 用户权限:'+user.roles);
+	return false;
 }
 
 function createToken(user){
@@ -56,11 +63,9 @@ function createToken(user){
 }
 
 
-module.exports=function(){
-	
-	return {
-		hasRole:hasRole,
-		createToken:createToken
-	};
-	
+module.exports={
+	hasRole:hasRole,
+	verifyRoles:verifyRoles,
+	createToken:createToken
 };
+	

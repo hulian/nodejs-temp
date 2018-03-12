@@ -16,9 +16,9 @@ if ('development' === restApp.get('env')) {
 }
 
 //所有API在这里申明
-var authenticationManager = require('../authentication/AuthenticationManager')();
-restApp.get('/login',require('./AuthenticationController').login);
-restApp.get('/hasRole',authenticationManager.hasRole(['user1','admin','user']),require('./TestController').testDao);
+var authenticationManager = require('../authentication/AuthenticationManager');
+restApp.get('/login',require('./authentication/AuthenticationController').login);
+restApp.get('/hasRole',authenticationManager.hasRole(['user1','admin','user']),require('./test/TestController').testDao);
 //......
 
 module.exports={

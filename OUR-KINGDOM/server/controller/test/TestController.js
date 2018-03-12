@@ -1,7 +1,7 @@
 'use strict';
 
-var logger = require('../logger/Logger');
-var tDao = require('../dao/TestDao');
+var logger = require('../../logger/Logger');
+var tDao = require('../../dao/TestDao');
 
 function testDao(req,res){
 	logger.app.debug(req.user);
