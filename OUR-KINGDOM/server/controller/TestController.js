@@ -8,10 +8,6 @@ function testDao(req,res){
 	res.send('hello world');
 }
 
-module.exports=function(){
-	
-	return {
-			testDao:testDao
-	}
-	
-}();
+module.exports={
+	testDao:testDao
+}
