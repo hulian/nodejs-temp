@@ -1,6 +1,6 @@
 'use strict';
 
-var logger = require('../logger/Logger')();
+var logger = require('../logger/Logger');
 var authenticationManager = require('../authentication/AuthenticationManager')();
 
 function login(req,res){

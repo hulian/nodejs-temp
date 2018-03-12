@@ -1,5 +1,6 @@
 'use strict';
 	
+var logger = require('../logger/Logger');
 var SocketIo = require('socket.io');
 var socketioJwt = require('socketio-jwt');
 var config = require('config');
@@ -13,11 +14,11 @@ io.use(socketioJwt.authorize({
 
 		
 io.on('connection', function(socket){
-	console.log('a user connected');
+	logger.app.trace('a user connected');
 				
 	socket.on('command',function(data,fn){
 					
-		console.log('command message:'+JSON.stringify(data));
+		logger.app.trace('command message:'+JSON.stringify(data));
 					
 		var req={
 			user:socket.decoded_token

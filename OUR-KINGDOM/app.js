@@ -1,6 +1,6 @@
 'use strict';
 
-var logger = require('./server/logger/Logger')();
+var logger = require('./server/logger/Logger');
 
 //使用CONFIG模块，加载默认文件夹CONFIG里的JSON配置
 var config = require('config');

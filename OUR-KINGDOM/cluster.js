@@ -1,5 +1,5 @@
 'use strict';
-var logger = require('./server/logger/Logger')();
+var logger = require('./server/logger/Logger');
 var cluster = require('cluster');
 
 if (cluster.isMaster) {
