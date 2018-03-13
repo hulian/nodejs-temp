@@ -1,9 +1,9 @@
 console.log('加载main.js成功！');
 require.config({
 	paths: {
-		"socketio":"lib/socketio",
-		"mainloop":"lib/mainloop.min",
-		"pixi":"lib/pixi.min"
+		'socketio':'lib/socketio',
+		'mainloop':'lib/mainloop.min',
+		'pixi':'lib/pixi.min'
 	},
 	shim: {
 		socketio: { deps: [] },
@@ -31,8 +31,8 @@ function initPIXI(pixi){
 	var app = new pixi.Application({width: 256, height: 256});
 
 	//全窗口
-	app.renderer.view.style.position = "absolute";
-	app.renderer.view.style.display = "block";
+	app.renderer.view.style.position = 'absolute';
+	app.renderer.view.style.display = 'block';
 	app.renderer.autoResize = true;
 	app.renderer.resize(window.innerWidth, window.innerHeight);
 	
@@ -40,7 +40,7 @@ function initPIXI(pixi){
 	document.body.appendChild(app.view);
 	
 	
-	console.log("pixi加载成功！");
+	console.log('pixi加载成功！');
 	return app;
 	
 }
@@ -49,7 +49,7 @@ require(['gameClientEngine','pixi'],function(engine,pixi){
 	
 	pixiApp=initPIXI(pixi);
 	
-	console.log("客户端游戏引擎加载成功！");
+	console.log('客户端游戏引擎加载成功！');
 	engine.start(update,draw);
 	
 });
