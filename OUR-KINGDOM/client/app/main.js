@@ -24,8 +24,16 @@ require(['gameClientEngine','pixi'],function(engine,pixi){
 });
 
 //游戏数据更新逻辑
+var cat = null;
 function update(){
-	//console.log("gameloop update...");
+	cat.x+=1;
+	if(cat.x>500){
+		cat.x=100;
+	}
+	cat.y+=1;
+	if(cat.y>500){
+		cat.y=100;
+	}
 }
 
 //游戏画面渲染逻辑
@@ -53,7 +61,11 @@ function initPIXI(pixi){
 	//
 	pixi.loader.add('/views/assets/img/timg.jpg')
 		.load(function(){
-			var cat = new pixi.Sprite(pixi.loader.resources['/views/assets/img/timg.jpg'].texture);
+			cat = new pixi.Sprite(pixi.loader.resources['/views/assets/img/timg.jpg'].texture);
+			cat.x=100;
+			cat.y=100;
+			cat.width=100;
+			cat.height=100;
 			pixiApp.stage.addChild(cat);
 		});
 	
