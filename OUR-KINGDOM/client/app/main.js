@@ -13,6 +13,16 @@ require.config({
 });
 window.console.log('加载配置成功！');
 
+require(['gameClientEngine','pixi'],function(engine,pixi){
+	
+	initPIXI(pixi);
+	
+	window.console.log('客户端游戏引擎加载成功！');
+	engine.start(update,draw);
+	
+	
+});
+
 //游戏数据更新逻辑
 function update(){
 	//console.log("gameloop update...");
@@ -51,13 +61,3 @@ function initPIXI(pixi){
 	window.console.log('pixi加载成功！');
 	
 }
-
-require(['gameClientEngine','pixi'],function(engine,pixi){
-	
-	initPIXI(pixi);
-	
-	window.console.log('客户端游戏引擎加载成功！');
-	engine.start(update,draw);
-	
-	
-});
