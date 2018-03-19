@@ -3,7 +3,8 @@ require.config({
 	paths: {
 		'socketio':'lib/socketio',
 		'mainloop':'lib/mainloop.min',
-		'pixi':'lib/pixi.min'
+		'pixi':'lib/pixi.min',
+		'babylon':'lib/babylon'
 	},
 	shim: {
 		socketio: { deps: [] },
@@ -13,63 +14,41 @@ require.config({
 });
 window.console.log('加载配置成功！');
 
-require(['gameClientEngine','pixi'],function(engine,pixi){
+
+require(['babylon'],function(BABYLON){
+
+	if(!BABYLON){
+		BABYLON=window.BABYLON;
+	}
 	
-	initPIXI(pixi);
-	
+	var canvas = document.getElementById('renderCanvas'); // Get the canvas element 
+
+	var engine = new BABYLON.Engine(canvas, true); // Generate the BABYLON 3D engine
+
+	// Create the scene space
+	var scene = new BABYLON.Scene(engine);
+
+	// Add a camera to the scene and attach it to the canvas
+	var camera = new BABYLON.ArcRotateCamera('Camera', Math.PI / 2, Math.PI / 2, 2, BABYLON.Vector3.Zero(), scene);
+	camera.attachControl(canvas, true);
+
+	// Add lights to the scene
+	var light1 = new BABYLON.HemisphericLight('light1', new BABYLON.Vector3(1, 1, 0), scene);
+	var light2 = new BABYLON.PointLight('light2', new BABYLON.Vector3(0, 1, -1), scene);
+
+	// This is where you create and manipulate meshes
+	var sphere = BABYLON.MeshBuilder.CreateSphere('sphere', {}, scene);
+
+	engine.runRenderLoop(function () { // Register a render loop to repeatedly render the scene
+		scene.render();
+	});
+
+
+	window.addEventListener('resize', function () { // Watch for browser/canvas resize events
+		engine.resize();
+	});
+		
 	window.console.log('客户端游戏引擎加载成功！');
-	engine.start(update,draw);
-	
-	
+
 });
-
-//游戏数据更新逻辑
-var cat = null;
-function update(){
-	cat.x+=1;
-	if(cat.x>500){
-		cat.x=100;
-	}
-	cat.y+=1;
-	if(cat.y>500){
-		cat.y=100;
-	}
-}
-
-//游戏画面渲染逻辑
-var pixiApp = null;
-function draw(){
-	//console.log(pixiApp);	
 	
-}
-
-//初始化2D渲染库
-function initPIXI(pixi){
-	
-	//Create a Pixi Application
-	pixiApp = new pixi.Application({width: 256, height: 256});
-
-	//全窗口
-	pixiApp.renderer.view.style.position = 'absolute';
-	pixiApp.renderer.view.style.display = 'block';
-	pixiApp.renderer.autoResize = true;
-	pixiApp.renderer.resize(window.innerWidth, window.innerHeight);
-	
-	//Add the canvas that Pixi automatically created for you to the HTML document
-	document.body.appendChild(pixiApp.view);
-
-	//
-	pixi.loader.add('/views/assets/img/timg.jpg')
-		.load(function(){
-			cat = new pixi.Sprite(pixi.loader.resources['/views/assets/img/timg.jpg'].texture);
-			cat.x=100;
-			cat.y=100;
-			cat.width=100;
-			cat.height=100;
-			pixiApp.stage.addChild(cat);
-		});
-	
-	
-	window.console.log('pixi加载成功！');
-	
-}
