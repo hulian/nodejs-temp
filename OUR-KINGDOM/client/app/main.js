@@ -2,8 +2,6 @@ window.console.log('加载main.js成功！');
 require.config({
 	paths: {
 		'socketio':'lib/socketio',
-		'mainloop':'lib/mainloop.min',
-		'pixi':'lib/pixi.min',
 		'babylon':'lib/babylon'
 	},
 	shim: {
